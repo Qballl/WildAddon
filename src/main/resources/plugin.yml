@@ -1,0 +1,7 @@
+name: ${project.name}
+version: ${project.version}
+main: me.qball.wildaddon.WildAddon
+depend: [Wild]
+softdepend: [Vault, Wild]
+authors: [Qball]
+description: Addon to wild by Qball
