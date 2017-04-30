@@ -5,6 +5,6 @@ How to build it:
 clone repo
 cd to directory
 run mvn clean package
-Help contruibute by doing
+Help contribute by doing
 git clone
 and then start coding I recommend replacing the WildTp jar with the latest one from the wildernesstp repo.
