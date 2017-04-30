@@ -1,5 +1,5 @@
 name: WildAddon
-version: 1.9.0ssh -D 1080 pi@
+version: 1.9.1
 main: me.qball.wildaddon.WildAddon
 depend: [Wild]
 softdepend: [Vault, Wild]

@@ -10,6 +10,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -70,6 +71,19 @@ public class WildAddon extends JavaPlugin implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onWildCommand(PlayerCommandPreprocessEvent e) {
         if (e.getMessage().equalsIgnoreCase("/wild") || e.getMessage().equalsIgnoreCase("/rtp")) {
+            if(e.getMessage().length()>=2){
+                String[] cmd = e.getMessage().split(" ");
+                try{
+                    Biome biome = Biome.valueOf(cmd[1]);
+                    if(e.getPlayer().hasPermission("wild.wildtp.biome."+cmd[1])){
+                        Wild.getInstance().biome.put(e.getPlayer().getUniqueId(),biome);
+                        checkPerms(e.getPlayer());
+                        e.setCancelled(true);
+                    }
+                }catch(IllegalArgumentException ex){
+                    e.getPlayer().sendMessage(ChatColor.RED+ "Invalid biome type");
+                }
+            }
             checkPerms(e.getPlayer());
             e.setCancelled(true);
         }
