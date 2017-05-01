@@ -2,6 +2,7 @@ package me.qball.wildaddon;
 
 import me.Qball.Wild.Utils.Region;
 import me.Qball.Wild.Wild;
+import org.bukkit.block.Biome;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,6 +32,10 @@ public class PortalEnter implements Listener {
                 Region region = new Region(maxVec, minVec);
                 Vector vec = new Vector(e.getTo().getBlockX(), e.getTo().getBlockY(), e.getTo().getBlockZ());
                 if (region.contains(vec)) {
+                    if(info.length>=4){
+                        if(e.getPlayer().hasPermission("wild.wildtp.biome."+info[3].toLowerCase()))
+                            plugin.biome.put(e.getPlayer().getUniqueId(), Biome.valueOf(info[3].toUpperCase()));
+                    }
                     plugin.portalUsed.add(e.getPlayer().getUniqueId());
                     addon.checkPerms(e.getPlayer());
                     break;

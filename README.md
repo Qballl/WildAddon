@@ -6,5 +6,6 @@ clone repo
 cd to directory
 run mvn clean package
 Help contribute by doing
-git clone
+Fork then git clone
 and then start coding I recommend replacing the WildTp jar with the latest one from the wildernesstp repo.
+Once you've made you changes just make PR and Ill review it.
