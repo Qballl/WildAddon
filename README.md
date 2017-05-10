@@ -1,6 +1,6 @@
 Home of the code for the addon to my wildernesstp plugin. 
 Code for it can be found here: https://github.com/Qballl/WildernessTp download here https://www.spigotmc.org/resources/wilderness-tp.18431/
-You can download the addon here https://www.spigotmc.org/resources/wildaddon.30861/ or build it youself.
+You can download the addon here https://www.spigotmc.org/resources/wildaddon.30861/ or build it yourself.
 How to build it:
 clone repo
 cd to directory

@@ -70,18 +70,23 @@ public class WildAddon extends JavaPlugin implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onWildCommand(PlayerCommandPreprocessEvent e) {
-        if (e.getMessage().equalsIgnoreCase("/wild") || e.getMessage().equalsIgnoreCase("/rtp")) {
-            if(e.getMessage().length()>=2){
-                String[] cmd = e.getMessage().split(" ");
+        if (e.getMessage().toLowerCase().startsWith("/wild")||
+                e.getMessage().toLowerCase().startsWith("/wilderness")||
+                e.getMessage().toLowerCase().startsWith("/rtp")) {
+            String[] cmd = e.getMessage().split(" ");
+            if(cmd.length>=2){
                 try{
-                    Biome biome = Biome.valueOf(cmd[1]);
-                    if(e.getPlayer().hasPermission("wild.wildtp.biome."+cmd[1])){
-                        Wild.getInstance().biome.put(e.getPlayer().getUniqueId(),biome);
+                    if(e.getPlayer().hasPermission("wild.wildtp.biome."+cmd[1])) {
+                        Biome biome = Biome.valueOf(cmd[1].toUpperCase());
+                        Wild.getInstance().biome.put(e.getPlayer().getUniqueId(), biome);
+                        checkPerms(e.getPlayer());
+                        e.setCancelled(true);
+                    }else{
                         checkPerms(e.getPlayer());
                         e.setCancelled(true);
                     }
                 }catch(IllegalArgumentException ex){
-                    e.getPlayer().sendMessage(ChatColor.RED+ "Invalid biome type");
+                    e.getPlayer().sendMessage(ChatColor.RED+"Invalid biome type");
                 }
             }
             checkPerms(e.getPlayer());
@@ -101,7 +106,6 @@ public class WildAddon extends JavaPlugin implements Listener {
         } else if (p.hasPermission("wild.wildtp.cost.bypass") && !p.hasPermission("wild.wildtp.cooldown.bypass")) {
             if (Wild.check(p)) {
                 saveLoc(p);
-                p.sendMessage("getWorld() Called");
                 getWorld(p);
             }
         } else if (!p.hasPermission("wild.wildtp.cost.bypass") && p.hasPermission("wild.wildtp.cooldown.bypass")) {
