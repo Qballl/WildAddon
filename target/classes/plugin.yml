@@ -1,5 +1,5 @@
 name: WildAddon
-version: 1.9.3
+version: 1.9.4
 main: me.qball.wildaddon.WildAddon
 depend: [Wild]
 softdepend: [Vault, Wild]
