@@ -70,14 +70,14 @@ public class WildAddon extends JavaPlugin implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onWildCommand(PlayerCommandPreprocessEvent e) {
-        if (e.getMessage().toLowerCase().startsWith("/wild")||
+        String[] command = e.getMessage().split(" ");
+        if (command[0].equalsIgnoreCase("/wild")||
                 e.getMessage().toLowerCase().startsWith("/wilderness")||
                 e.getMessage().toLowerCase().startsWith("/rtp")) {
-            String[] cmd = e.getMessage().split(" ");
-            if(cmd.length>=2){
+            if(command.length>=2){
                 try{
-                    if(e.getPlayer().hasPermission("wild.wildtp.biome."+cmd[1])) {
-                        Biome biome = Biome.valueOf(cmd[1].toUpperCase());
+                    if(e.getPlayer().hasPermission("wild.wildtp.biome."+command[1])) {
+                        Biome biome = Biome.valueOf(command[1].toUpperCase());
                         Wild.getInstance().biome.put(e.getPlayer().getUniqueId(), biome);
                         checkPerms(e.getPlayer());
                         e.setCancelled(true);
@@ -100,6 +100,10 @@ public class WildAddon extends JavaPlugin implements Listener {
     }
 
     public void checkPerms(Player p) {
+        if(!p.hasPermission("wild.wildtp")){
+            p.sendMessage(ChatColor.translateAlternateColorCodes('&', wild.getConfig().getString("NoPerm")));
+            return;
+        }
         if (p.hasPermission("wild.wildtp.cost.bypass") && p.hasPermission("wild.wildtp.cooldown.bypass")) {
             saveLoc(p);
             getWorld(p);
@@ -145,9 +149,7 @@ public class WildAddon extends JavaPlugin implements Listener {
                 if (cool.contains("{cool}"))
                     coolMsg = strCoolMsg.replaceAll("\\{cool}", cool);
                 else if (cool.contains("{rem}")) {
-                    int remand = Wild.getRem(p);
-                    String rem = String.valueOf(remand);
-                    coolMsg = cool.replaceAll("\\{rem}", rem);
+                    coolMsg = cool.replaceAll("\\{rem}", Wild.getRem(p));
                 }
 
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', coolMsg));
