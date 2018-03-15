@@ -1,9 +1,6 @@
 package me.qball.wildaddon;
 
-import me.Qball.Wild.Utils.Checks;
-import me.Qball.Wild.Utils.GetRandomLocation;
-import me.Qball.Wild.Utils.WildTpBack;
-import me.Qball.Wild.Utils.WorldInfo;
+import me.Qball.Wild.Utils.*;
 import me.Qball.Wild.Wild;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -99,7 +96,7 @@ public class WildAddon extends JavaPlugin implements Listener {
         wildTpBack.saveLoc(p, p.getLocation());
     }
 
-    public void checkPerms(Player p) {
+   public void checkPerms(Player p) {
         if(!p.hasPermission("wild.wildtp")){
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', wild.getConfig().getString("NoPerm")));
             return;
@@ -111,6 +108,18 @@ public class WildAddon extends JavaPlugin implements Listener {
             if (Wild.check(p)) {
                 saveLoc(p);
                 getWorld(p);
+            }else {
+                int cooldown = this.getConfig().getInt("Cooldown");
+                String cool = String.valueOf(cooldown);
+                String strCoolMsg = wild.getConfig().getString("Cooldownmsg");
+                String coolMsg = "";
+                if (cool.contains("{cool}"))
+                    coolMsg = strCoolMsg.replaceAll("\\{cool}", cool);
+                else if (cool.contains("{rem}")) {
+                    coolMsg = cool.replaceAll("\\{rem}", Wild.getRem(p));
+                }
+
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', coolMsg));
             }
         } else if (!p.hasPermission("wild.wildtp.cost.bypass") && p.hasPermission("wild.wildtp.cooldown.bypass")) {
             saveLoc(p);
@@ -119,7 +128,8 @@ public class WildAddon extends JavaPlugin implements Listener {
                 EconomyResponse r = econ.withdrawPlayer(p, cost);
                 if (r.transactionSuccess()) {
                     getWorld(p);
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', costMSG));
+                    if(wild.getConfig().getBoolean("DoCostMsg"))
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', costMSG));
                 } else {
                     p.sendMessage(ChatColor.RED + "Something has gone wrong sorry but we will be unable to teleport you :( ");
                 }
@@ -134,7 +144,8 @@ public class WildAddon extends JavaPlugin implements Listener {
                     EconomyResponse r = econ.withdrawPlayer(p, cost);
                     if (r.transactionSuccess()) {
                         getWorld(p);
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', costMSG));
+                        if(wild.getConfig().getBoolean("DoCostMsg"))
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', costMSG));
                     } else {
                         p.sendMessage(ChatColor.RED + "Something has gone wrong sorry but we will be unable to teleport you :( ");
                     }
