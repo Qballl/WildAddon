@@ -104,36 +104,12 @@ public class WildAddon extends JavaPlugin implements Listener {
        if (cost == 0) {
            if (p.hasPermission("wild.wildtp.cooldown.bypass")) {
                saveLoc(p);
-               if (econ.getBalance(p) >= cost) {
-
-                   EconomyResponse r = econ.withdrawPlayer(p, cost);
-                   if (r.transactionSuccess()) {
-                       getWorld(p);
-                       if (wild.getConfig().getBoolean("DoCostMsg"))
-                           p.sendMessage(ChatColor.translateAlternateColorCodes('&', costMSG));
-                   } else {
-                       p.sendMessage(ChatColor.RED + "Something has gone wrong sorry but we will be unable to teleport you :( ");
-                   }
-               } else {
-                   p.sendMessage(ChatColor.RED + "You do not have enough money to use this command");
-               }
+               getWorld(p);
            } else if (!p.hasPermission("wild.wildtp.cooldown.bypass")) {
                if (Wild.check(p)) {
                    saveLoc(p);
-                   if (econ.getBalance(p) >= cost) {
-
-                       EconomyResponse r = econ.withdrawPlayer(p, cost);
-                       if (r.transactionSuccess()) {
-                           getWorld(p);
-                           if (wild.getConfig().getBoolean("DoCostMsg"))
-                               p.sendMessage(ChatColor.translateAlternateColorCodes('&', costMSG));
-                       } else {
-                           p.sendMessage(ChatColor.RED + "Something has gone wrong sorry but we will be unable to teleport you :( ");
-                       }
-                   } else {
-                       p.sendMessage(ChatColor.RED + "You do not have enough money to use this command");
-                   }
-               } else {
+                   getWorld(p);
+               }else {
                    int cooldown = this.getConfig().getInt("Cooldown");
                    String cool = String.valueOf(cooldown);
                    String strCoolMsg = wild.getConfig().getString("Cooldownmsg");
@@ -147,6 +123,7 @@ public class WildAddon extends JavaPlugin implements Listener {
                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', coolMsg));
                }
            }
+
            return;
        }
         if (p.hasPermission("wild.wildtp.cost.bypass") && p.hasPermission("wild.wildtp.cooldown.bypass")) {
